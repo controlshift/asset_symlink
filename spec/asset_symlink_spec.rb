@@ -11,6 +11,7 @@ describe AssetSymlink do
       FileUtils.mkdir_p(assets)
       @assets_stub = double()
       Rails.stub_chain(:application,:assets => @assets_stub)
+      Rails.stub_chain(:application,:config,:assets,:compile => true)
       Rails.stub(:root).and_return(Pathname.new(sandbox))
     end
 

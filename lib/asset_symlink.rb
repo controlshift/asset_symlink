@@ -4,7 +4,11 @@ require 'fileutils'
 module AssetSymlink
   def self.execute config
     normalize_configuration(config).each do |private_name, public_name|
-      digested_location = Rails.root.join('public','assets', Rails.application.assets.find_asset(private_name).digest_path)
+      if Rails.application.config.assets.compile
+        digested_location = Rails.root.join('public','assets', Rails.application.assets.find_asset(private_name).digest_path)
+      else
+        digested_location = Rails.root.join('public', 'assets', Rails.application.assets_manifest.assets[private_name])
+      end
       public_location = Rails.root.join('public','assets',public_name)
       if File.dirname(public_name) != '.'
         FileUtils.mkdir_p(File.dirname(public_location))
